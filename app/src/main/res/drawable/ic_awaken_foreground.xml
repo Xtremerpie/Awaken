@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- AWAKEN mark: a sun rising over a horizon whose rays are graded like an audio level meter.
+     Doubles as the adaptive-icon foreground, the themed (monochrome) icon and the splash icon. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- Rising sun -->
+    <path android:pathData="M36,66 A18,18 0 0 1 72,66 Z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:startX="54" android:startY="48"
+                android:endX="54" android:endY="66"
+                android:type="linear">
+                <item android:color="#FFFFC24A" android:offset="0.0" />
+                <item android:color="#FFFF7A1A" android:offset="1.0" />
+            </gradient>
+        </aapt:attr>
+    </path>
+
+    <!-- Horizon -->
+    <path
+        android:pathData="M28,70.5 L80,70.5"
+        android:strokeColor="#FFFFC24A"
+        android:strokeWidth="3"
+        android:strokeLineCap="round" />
+
+    <!-- Reflection under the horizon -->
+    <path
+        android:pathData="M42,77 L66,77"
+        android:strokeColor="#99FF7A1A"
+        android:strokeWidth="2.5"
+        android:strokeLineCap="round" />
+    <path
+        android:pathData="M48,83 L60,83"
+        android:strokeColor="#55FF7A1A"
+        android:strokeWidth="2.5"
+        android:strokeLineCap="round" />
+
+    <!-- Level-meter rays -->
+    <path
+        android:pathData="M54,42 L54,28"
+        android:strokeColor="#FFFFC24A"
+        android:strokeWidth="3.5"
+        android:strokeLineCap="round" />
+    <path
+        android:pathData="M65,46.9 L70.5,37.4"
+        android:strokeColor="#FFFFA733"
+        android:strokeWidth="3.5"
+        android:strokeLineCap="round" />
+    <path
+        android:pathData="M43,46.9 L37.5,37.4"
+        android:strokeColor="#FFFFA733"
+        android:strokeWidth="3.5"
+        android:strokeLineCap="round" />
+    <path
+        android:pathData="M73,55 L80,51"
+        android:strokeColor="#FFFF7A1A"
+        android:strokeWidth="3.5"
+        android:strokeLineCap="round" />
+    <path
+        android:pathData="M35,55 L28,51"
+        android:strokeColor="#FFFF7A1A"
+        android:strokeWidth="3.5"
+        android:strokeLineCap="round" />
+</vector>

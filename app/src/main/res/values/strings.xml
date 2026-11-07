@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">AWAKEN</string>
+    <string name="channel_playback">Playback</string>
+    <string name="channel_playback_desc">Shown while AWAKEN is playing a scheduled item</string>
+    <string name="channel_alarm">Alarms and reminders</string>
+    <string name="channel_alarm_desc">Alerts when a scheduled alarm or reminder fires</string>
+    <string name="channel_update">App updates</string>
+    <string name="channel_update_desc">Announces new AWAKEN versions</string>
+</resources>

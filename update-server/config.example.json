@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "revision": 1,
+  "branding": { "tagline": "Rise on your own schedule.", "primary": "#FFC24A", "secondary": "#FF7A1A" },
+  "themes": [
+    { "id": "midnight-sun", "name": "Midnight Sun", "primary": "#FFD27A", "secondary": "#FF5A1F", "background": "#030303" }
+  ],
+  "dashboardLayout": ["announcement", "clock", "countdown", "next_playback", "hourly_status", "current_media", "quick_controls", "history"],
+  "featureFlags": { "visualizer": true, "playlists": true, "history": true, "announcements": true, "featured_content": true, "suggested_schedules": true },
+  "announcements": [
+    { "id": "welcome-1", "title": "Welcome to AWAKEN", "body": "New themes and suggested schedules are available.", "severity": "info" }
+  ],
+  "featuredMedia": [],
+  "suggestedSchedules": [
+    { "id": "morning-wake", "name": "Morning wake-up", "kind": "alarm_clock", "start": "06:30", "days": ["mon", "tue", "wed", "thu", "fri"] },
+    { "id": "stretch", "name": "Stretch break", "kind": "recurring", "start": "10:00", "end": "17:00", "intervalMinutes": 90 }
+  ],
+  "hiddenSettings": [],
+  "texts": { "home.subtitle": "Your day, on schedule." }
+}
