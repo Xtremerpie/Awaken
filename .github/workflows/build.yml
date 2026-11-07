@@ -1,3 +1,4 @@
+
 name: Build AWAKEN
 
 on:
@@ -11,67 +12,56 @@ jobs:
   build:
     runs-on: ubuntu-latest
     timeout-minutes: 45
+
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Fix executable permissions
+        run: |
+          chmod +x gradlew
+          chmod +x "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" || true
+
+      - name: Setup Java
+        uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: "17"
+
       - name: Accept Android SDK licenses
-        run: yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses > /dev/null || true
-      - uses: gradle/actions/setup-gradle@v4
-
-      - name: Unit tests (core + app)
         run: |
-          set -o pipefail
-          ./gradlew :core:test :app:testDebugUnitTest --stacktrace 2>&1 | tee test-log.txt
+          yes | bash "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses || true
 
-      - name: Debug APK
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Unit Tests
         run: |
-          set -o pipefail
-          ./gradlew :app:assembleDebug --stacktrace 2>&1 | tee build-log.txt
+          bash ./gradlew :core:test :app:testDebugUnitTest --stacktrace
 
-      - name: Inspect the APK (package, version, permissions, bundled video)
+      - name: Build Debug APK
         run: |
-          APK=$(ls app/build/outputs/apk/debug/*.apk | head -1)
-          BT=$(ls -d "$ANDROID_HOME"/build-tools/* | sort -V | tail -1)
-          "$BT/aapt2" dump badging "$APK" | grep -E "^package|sdkVersion|uses-permission|launchable" | tee apk-info.txt
-          unzip -l "$APK" | grep -E "res/raw|classes|AndroidManifest" | tee -a apk-info.txt
-          "$BT/apksigner" verify --print-certs "$APK" | tee -a apk-info.txt
+          bash ./gradlew :app:assembleDebug --stacktrace
 
-      - uses: actions/upload-artifact@v4
+      - name: Verify APK
+        run: |
+          APK=$(find app/build/outputs/apk/debug -name "*.apk" | head -1)
+          test -n "$APK"
+          echo "APK FOUND: $APK"
+          ls -lh "$APK"
+
+      - name: Upload AWAKEN APK
+        uses: actions/upload-artifact@v4
         with:
           name: awaken-debug-apk
           path: app/build/outputs/apk/debug/*.apk
 
-      - uses: actions/upload-artifact@v4
+      - name: Upload Build Logs
         if: always()
+        uses: actions/upload-artifact@v4
         with:
           name: awaken-build-logs
           path: |
-            test-log.txt
-            build-log.txt
-            apk-info.txt
-            core/build/reports/tests/test
-            app/build/reports/tests/testDebugUnitTest
-          if-no-files-found: ignore
-
-      - name: Release APK (only on tags, only when signing secrets exist)
-        if: startsWith(github.ref, 'refs/tags/v')
-        env:
-          AWAKEN_KEYSTORE_B64: ${{ secrets.AWAKEN_KEYSTORE_B64 }}
-          AWAKEN_KEYSTORE_PASSWORD: ${{ secrets.AWAKEN_KEYSTORE_PASSWORD }}
-          AWAKEN_KEY_ALIAS: ${{ secrets.AWAKEN_KEY_ALIAS }}
-          AWAKEN_KEY_PASSWORD: ${{ secrets.AWAKEN_KEY_PASSWORD }}
-        run: |
-          if [ -z "$AWAKEN_KEYSTORE_B64" ]; then echo "No signing secrets; skipping release build"; exit 0; fi
-          echo "$AWAKEN_KEYSTORE_B64" | base64 -d > "$RUNNER_TEMP/release.jks"
-          export AWAKEN_KEYSTORE_FILE="$RUNNER_TEMP/release.jks"
-          ./gradlew :app:assembleRelease --stacktrace
-
-      - uses: actions/upload-artifact@v4
-        if: startsWith(github.ref, 'refs/tags/v')
-        with:
-          name: awaken-release-apk
-          path: app/build/outputs/apk/release/*.apk
+            app/build/reports/
+            core/build/reports/
           if-no-files-found: ignore
