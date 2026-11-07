@@ -1,5 +1,6 @@
 package com.awaken.app.ui.history
 
+import androidx.compose.ui.unit.dp
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
